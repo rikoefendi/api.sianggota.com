@@ -7,11 +7,22 @@ import (
 	"os/signal"
 	"time"
 
+	"api.sianggota.com/config"
+	"api.sianggota.com/database"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
 
 func main() {
+	//init config
+	config := config.GetConfig()
+	//connect database
+	db := database.Connect(config.Database)
+	if d, ok := db.DB(); ok != nil {
+		if err := d.Ping(); err != nil {
+			defer d.Close()
+		}
+	}
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
 		message := `
@@ -21,8 +32,24 @@ func main() {
 		<p>==================================================================================</center>`
 		return c.HTML(200, message)
 	})
+	type greeting struct {
+		ID    string `gorm:"default:random_string(8)"` // db func
+		Hello string
+	}
+	db.AutoMigrate(&greeting{})
+	e.GET("/ping", func(c echo.Context) error {
+		greet := greeting{
+			Hello: "world",
+		}
+		result := db.Create(&greet)
+		if result.Error != nil {
+			return c.String(500, result.Error.Error())
+		}
+
+		return c.JSON(200, greet)
+	})
 	go func() {
-		address := fmt.Sprintf("localhost:%d", 3000)
+		address := fmt.Sprintf("%s:%d", config.App.Host, config.App.Port)
 
 		if err := e.Start(address); err != nil {
 			log.Info("shutting down the server")
