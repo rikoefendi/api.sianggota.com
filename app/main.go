@@ -9,6 +9,7 @@ import (
 
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
+	"api.sianggota.com/middlewares"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
@@ -24,6 +25,8 @@ func main() {
 		}
 	}
 	e := echo.New()
+	//set middleware
+	middlewares.New(e)
 	e.GET("/", func(c echo.Context) error {
 		message := `
 		<center>==================================================================================
