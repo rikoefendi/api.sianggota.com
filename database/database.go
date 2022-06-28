@@ -10,11 +10,12 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var Database *gorm.DB
+var db *gorm.DB
 
 func Connect(cfg config.Database) *gorm.DB {
+	var err error
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s application_name=%s", cfg.Host, cfg.Username, cfg.Password, cfg.Name, cfg.Port, cfg.SSLMode, cfg.TimeZone, cfg.Name)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default,
 	})
 	if err != nil {
@@ -25,6 +26,9 @@ func Connect(cfg config.Database) *gorm.DB {
 		// db = db.Debug()
 		db.Logger.LogMode(logger.Error)
 	}
-	Database = db
+	return db
+}
+
+func Session() *gorm.DB {
 	return db
 }
