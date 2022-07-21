@@ -7,8 +7,10 @@ import (
 	"os/signal"
 	"time"
 
+	"api.sianggota.com/api"
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
+	"api.sianggota.com/database/migration"
 	"api.sianggota.com/middlewares"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -35,22 +37,20 @@ func main() {
 		<p>==================================================================================</center>`
 		return c.HTML(200, message)
 	})
-	type greeting struct {
-		ID    string `gorm:"default:random_string(8)"` // db func
-		Hello string
-	}
-	db.AutoMigrate(&greeting{})
+	migration.Migrate()
 	e.GET("/ping", func(c echo.Context) error {
-		greet := greeting{
-			Hello: "world",
-		}
-		result := db.Create(&greet)
-		if result.Error != nil {
-			return c.String(500, result.Error.Error())
-		}
-
-		return c.JSON(200, greet)
+		return c.JSON(200, map[string]string{"hello": "world"})
 	})
+
+	//
+	// init api
+	//
+
+	api.New(*e)
+	e.GET("/list-routes", func(c echo.Context) error {
+		return c.JSON(200, e.Routes())
+	})
+
 	go func() {
 		address := fmt.Sprintf("%s:%d", config.App.Host, config.App.Port)
 

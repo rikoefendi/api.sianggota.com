@@ -2,8 +2,10 @@ package database
 
 import (
 	"fmt"
+	"time"
 
 	"api.sianggota.com/config"
+
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -31,4 +33,14 @@ func Connect(cfg config.Database) *gorm.DB {
 
 func Session() *gorm.DB {
 	return db
+}
+
+type ID struct {
+	ID uint `json:"id" gorm:"primaryKey"`
+}
+
+type TimeStamp struct {
+	CreatedAt time.Time      `json:"created_at" gorm:"index"`
+	UpdatedAt time.Time      `json:"updated_at" gorm:"index"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index;default:null"`
 }
