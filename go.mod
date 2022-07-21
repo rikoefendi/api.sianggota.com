@@ -14,6 +14,9 @@ require (
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/gookit/filter v1.1.2 // indirect
+	github.com/gookit/goutil v0.5.5 // indirect
+	github.com/gookit/validate v1.4.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.12.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

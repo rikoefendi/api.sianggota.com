@@ -18,6 +18,9 @@ func (h *UserHandler) Create(c echo.Context) (err error) {
 	if err = c.Bind(input); err != nil {
 		return c.JSON(400, err.Error())
 	}
+	if err = c.Validate(input); err != nil {
+		return err
+	}
 	result, err := h.r.Create(*input)
 	if err != nil {
 		return c.JSON(500, err)
