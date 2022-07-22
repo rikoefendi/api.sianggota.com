@@ -2,7 +2,6 @@ package users
 
 import (
 	"api.sianggota.com/database"
-	"github.com/neko-neko/echo-logrus/v2/log"
 	"gorm.io/gorm"
 )
 
@@ -22,6 +21,5 @@ func (r *Repository) Create(u UserCreateInput) (m Model, err error) {
 	if result.Error != nil {
 		return m, result.Error
 	}
-	log.Info(m)
 	return m, nil
 }

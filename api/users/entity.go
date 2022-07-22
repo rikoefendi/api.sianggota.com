@@ -10,6 +10,6 @@ type UserCreateInput struct {
 func UserInput(u UserCreateInput) (m Model) {
 	m.Name = &u.Name
 	m.Email = &u.Email
-	m.Password = &u.Password
+	m.Password = u.Password
 	return m
 }

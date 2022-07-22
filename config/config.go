@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/labstack/gommon/log"
 )
 
 type App struct {
@@ -38,7 +37,7 @@ func GetConfig() *Config {
 	if config == nil {
 		err := cleanenv.ReadEnv(&cfg)
 		if err != nil {
-			log.Error(err)
+			panic(err)
 		}
 		config = &cfg
 	}
