@@ -7,9 +7,6 @@ type UserCreateInput struct {
 	PasswordConfirmation string `json:"password_confirmation" validate:"required|eqField:password"`
 }
 
-func UserInput(u UserCreateInput) (m Model) {
-	m.Name = &u.Name
-	m.Email = &u.Email
-	m.Password = u.Password
-	return m
+type UserUpdateInput struct {
+	Name string `json:"name"`
 }

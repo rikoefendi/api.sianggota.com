@@ -24,7 +24,7 @@ func (Model) TableName() string {
 }
 
 func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(m.Password), bcrypt.DefaultCost)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(m.Password), bcrypt.MinCost)
 
 	m.Password = string(hashPassword)
 	// m.Password

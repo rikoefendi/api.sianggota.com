@@ -9,4 +9,5 @@ func Routes(g *echo.Group) {
 	handler := Handler(*repo)
 	users := g.Group("users")
 	users.POST("", handler.Create)
+	users.PUT("/:id", handler.Update)
 }

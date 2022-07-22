@@ -17,20 +17,14 @@ func NewValidator() (cv *CustomValidator) {
 		opt.StopOnError = false
 	})
 	validate.AddValidator("unique", func(value string, table string, field string) bool {
-		var count int64
-		db, err := database.Session().DB()
-		if err != nil {
-			panic(err)
-		}
-		res := db.QueryRow(fmt.Sprintf(`SELECT count("%s") FROM %s WHERE %s='%s'`, field, table, field, value))
-		if res.Err() != nil {
-			panic(res.Err())
-		}
-		res.Scan(&count)
-		return count < 1
+		return cv.Query(value, table, field)
+	})
+	validate.AddValidator("exists", func(value string, table string, field string) bool {
+		return cv.Query(value, table, field)
 	})
 	validate.AddGlobalMessages(map[string]string{
 		"unique": "{field} already exist",
+		"exists": "{field} not exist",
 	})
 	return new(CustomValidator)
 }
@@ -40,4 +34,18 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, v.Errors.All())
 	}
 	return nil
+}
+
+func (cb *CustomValidator) Query(value string, table string, field string) bool {
+	var count int64
+	db, err := database.Session().DB()
+	if err != nil {
+		panic(err)
+	}
+	res := db.QueryRow(fmt.Sprintf(`SELECT count("%s") FROM %s WHERE %s='%s'`, field, table, field, value))
+	if res.Err() != nil {
+		panic(res.Err())
+	}
+	res.Scan(&count)
+	return count < 1
 }

@@ -25,8 +25,7 @@ func Connect(cfg config.Database) *gorm.DB {
 		panic(err)
 	}
 	if cfg.Logger {
-		// db = db.Debug()
-		db.Logger.LogMode(logger.Error)
+		db = db.Debug()
 	}
 	return db
 }
