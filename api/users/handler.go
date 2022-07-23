@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -51,4 +52,16 @@ func (h *UserHandler) Update(c echo.Context) (err error) {
 		return c.JSON(500, err.Error())
 	}
 	return c.JSON(200, result)
+}
+
+func (h *UserHandler) Show(c echo.Context) (err error) {
+	id := c.Param("id")
+	user, err := h.r.FetchById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, gorm.ErrRecordNotFound.Error())
+		}
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, user)
 }

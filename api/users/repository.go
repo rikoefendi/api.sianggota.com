@@ -38,3 +38,12 @@ func (r *Repository) UpdateById(id string, dest Model) (Model, error) {
 	}
 	return m, nil
 }
+
+func (r *Repository) FetchById(id string) (Model, error) {
+	m := Model{}
+	result := r.db.Where("id = ?", id).First(&m)
+	if result.Error != nil {
+		return m, result.Error
+	}
+	return m, nil
+}
