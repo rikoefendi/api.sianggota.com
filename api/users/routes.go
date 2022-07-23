@@ -11,4 +11,5 @@ func Routes(g *echo.Group) {
 	users.POST("", handler.Create)
 	users.PUT("/:id", handler.Update)
 	users.GET("/:id", handler.Show)
+	users.GET("", handler.Index)
 }

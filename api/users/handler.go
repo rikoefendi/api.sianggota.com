@@ -65,3 +65,11 @@ func (h *UserHandler) Show(c echo.Context) (err error) {
 	}
 	return c.JSON(http.StatusOK, user)
 }
+
+func (h *UserHandler) Index(c echo.Context) (err error) {
+	users, err := h.r.ShowAll()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, users)
+}

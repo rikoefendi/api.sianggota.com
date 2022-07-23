@@ -39,11 +39,15 @@ func (r *Repository) UpdateById(id string, dest Model) (Model, error) {
 	return m, nil
 }
 
-func (r *Repository) FetchById(id string) (Model, error) {
-	m := Model{}
-	result := r.db.Where("id = ?", id).First(&m)
+func (r *Repository) FetchById(id string) (user Model, err error) {
+	result := r.db.Where("id = ?", id).First(&user)
 	if result.Error != nil {
-		return m, result.Error
+		return user, result.Error
 	}
-	return m, nil
+	return user, nil
+}
+
+func (r *Repository) ShowAll() (users []Model, err error) {
+	result := r.db.Find(&users)
+	return users, result.Error
 }
