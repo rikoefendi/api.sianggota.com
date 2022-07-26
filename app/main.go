@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -11,10 +12,11 @@ import (
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
 	"api.sianggota.com/database/migration"
+	"api.sianggota.com/database/seed"
 	"api.sianggota.com/lib"
 	"api.sianggota.com/middlewares"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/neko-neko/echo-logrus/v2/log"
 )
 
 func main() {
@@ -27,6 +29,15 @@ func main() {
 			defer d.Close()
 		}
 	}
+	//run seed and stop
+	cmd := flag.String("seed", "", "")
+	flag.Parse()
+	if len(string(*cmd)) != 0 {
+		seed.Populate(string(*cmd))
+		os.Exit(1)
+	}
+
+	//start server
 	e := echo.New()
 	//set validator
 	e.Validator = lib.NewValidator()

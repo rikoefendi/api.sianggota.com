@@ -3,6 +3,7 @@ module api.sianggota.com
 go 1.17
 
 require (
+	github.com/bxcodec/faker/v3 v3.8.0
 	github.com/gookit/validate v1.4.2
 	github.com/ilyakaznacheev/cleanenv v1.3.0
 	github.com/labstack/echo/v4 v4.7.2
