@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"api.sianggota.com/api"
@@ -30,10 +31,12 @@ func main() {
 		}
 	}
 	//run seed and stop
-	cmd := flag.String("seed", "", "")
+	seedCmd := flag.String("seed", "", "")
+	countCmd := flag.String("count", "", "")
 	flag.Parse()
-	if len(string(*cmd)) != 0 {
-		seed.Populate(string(*cmd))
+	if len(string(*seedCmd)) != 0 {
+		count, _ := strconv.Atoi(*countCmd)
+		seed.Populate(string(*seedCmd), count)
 		os.Exit(1)
 	}
 
