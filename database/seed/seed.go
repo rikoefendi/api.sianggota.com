@@ -11,6 +11,7 @@ import (
 
 var funcMap = map[string]interface{}{
 	"create_users": createUsers,
+	"delete_users": deleteUsers,
 }
 var count int = 10
 var cc int = 50
@@ -45,4 +46,11 @@ func createUsers() (err error) {
 	bar.Finish()
 
 	return
+}
+
+func deleteUsers() (err error) {
+	for i := 0; i < count; i++ {
+		err = database.Session().Exec("update users set deleted_at = transaction_timestamp()  where id = (SELECT id FROM users order by random() limit 1);").Error
+	}
+	return err
 }

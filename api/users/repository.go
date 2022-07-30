@@ -47,7 +47,10 @@ func (r *Repository) FetchById(id string) (user Model, err error) {
 	return user, nil
 }
 
-func (r *Repository) ShowAll() (users []Model, err error) {
-	result := r.db.Find(&users)
-	return users, result.Error
+func (r *Repository) ShowAll(page int, perPage int) (users []Model, paginated database.Paginated, err error) {
+	paginated = database.Paginate(r.db.Where("name like '%s%'")).SetPage(page).SetPerPage(perPage).Exec(&users)
+	if paginated.Error != nil {
+		return users, paginated, paginated.Error
+	}
+	return users, paginated, nil
 }

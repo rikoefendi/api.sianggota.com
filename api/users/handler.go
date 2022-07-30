@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -67,9 +68,15 @@ func (h *UserHandler) Show(c echo.Context) (err error) {
 }
 
 func (h *UserHandler) Index(c echo.Context) (err error) {
-	users, err := h.r.ShowAll()
+	perPage, _ := strconv.Atoi(c.QueryParam("per_page"))
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	users, paginated, err := h.r.ShowAll(page, perPage)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusOK, users)
+	res := map[string]interface{}{
+		"meta": paginated,
+		"data": users,
+	}
+	return c.JSON(http.StatusOK, res)
 }
