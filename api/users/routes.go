@@ -12,4 +12,5 @@ func Routes(g *echo.Group) {
 	users.PUT("/:id", handler.Update)
 	users.GET("/:id", handler.Show)
 	users.GET("", handler.Index)
+	users.DELETE("/:id", handler.Destroy)
 }

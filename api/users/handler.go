@@ -6,6 +6,7 @@ import (
 
 	"api.sianggota.com/utils"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type UserHandler struct {
@@ -70,4 +71,22 @@ func (h *UserHandler) Index(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, utils.Response(users).SetMeta(paginated))
+}
+
+func (h *UserHandler) Destroy(c echo.Context) (err error) {
+	id := c.Param("id")
+	permanent := c.QueryParam("permanent")
+	db := h.r.db
+	if permanent == "true" {
+		db = db.Unscoped()
+	}
+	user := &Model{}
+	result := db.Where("id = ?", id).Delete(&user)
+	if result.RowsAffected < 1 {
+		return gorm.ErrRecordNotFound
+	}
+	if result.Error != nil {
+		return result.Error
+	}
+	return c.JSON(http.StatusOK, utils.Response(nil).SetMessage("successfully"))
 }
