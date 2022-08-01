@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"api.sianggota.com/database"
+	"api.sianggota.com/utils"
 	"github.com/gookit/validate"
 	"github.com/labstack/echo/v4"
 )
@@ -31,7 +32,8 @@ func NewValidator() (cv *CustomValidator) {
 func (cv *CustomValidator) Validate(i interface{}) error {
 	v := validate.Struct(i)
 	if ok := v.Validate(); !ok {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, v.Errors.All())
+		err := v.Errors.All()
+		return echo.NewHTTPError(http.StatusUnprocessableEntity, utils.Response(nil).SetErrors(err).SetMessage(http.StatusText(http.StatusUnprocessableEntity)))
 	}
 	return nil
 }

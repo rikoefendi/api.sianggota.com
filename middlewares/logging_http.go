@@ -16,7 +16,6 @@ func Logger() echo.MiddlewareFunc {
 			start := time.Now()
 
 			var err error
-			res.Header().Set("test", "test")
 			if err = next(c); err != nil {
 				c.Error(err)
 			}

@@ -1,12 +1,11 @@
 package users
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 
+	"api.sianggota.com/utils"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 type UserHandler struct {
@@ -21,7 +20,7 @@ func Handler(r Repository) (h *UserHandler) {
 func (h *UserHandler) Create(c echo.Context) (err error) {
 	input := &UserCreateInput{}
 	if err = c.Bind(input); err != nil {
-		return c.JSON(400, err.Error())
+		return err
 	}
 	if err = c.Validate(input); err != nil {
 		return err
@@ -30,14 +29,15 @@ func (h *UserHandler) Create(c echo.Context) (err error) {
 	if err != nil {
 		return c.JSON(500, err)
 	}
-	return c.JSON(200, result)
+	r := utils.Response(result)
+	return c.JSON(http.StatusOK, r)
 }
 
 func (h *UserHandler) Update(c echo.Context) (err error) {
 	input := UserUpdateInput{}
 	id := c.Param("id")
 	if err = c.Bind(&input); err != nil {
-		return c.JSON(400, err.Error())
+		return err
 	}
 	if err = c.Validate(input); err != nil {
 		return err
@@ -47,24 +47,19 @@ func (h *UserHandler) Update(c echo.Context) (err error) {
 	}
 	result, err := h.r.UpdateById(id, dest)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.JSON(404, err.Error())
-		}
-		return c.JSON(500, err.Error())
+		return err
 	}
-	return c.JSON(200, result)
+	return c.JSON(http.StatusOK, utils.Response(result))
 }
 
 func (h *UserHandler) Show(c echo.Context) (err error) {
 	id := c.Param("id")
 	user, err := h.r.FetchById(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.JSON(http.StatusNotFound, gorm.ErrRecordNotFound.Error())
-		}
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		return err
 	}
-	return c.JSON(http.StatusOK, user)
+	code := http.StatusOK
+	return c.JSON(code, utils.Response(user))
 }
 
 func (h *UserHandler) Index(c echo.Context) (err error) {
@@ -74,9 +69,5 @@ func (h *UserHandler) Index(c echo.Context) (err error) {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	res := map[string]interface{}{
-		"meta": paginated,
-		"data": users,
-	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, utils.Response(users).SetMeta(paginated))
 }

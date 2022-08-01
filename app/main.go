@@ -44,6 +44,8 @@ func main() {
 	e := echo.New()
 	//set validator
 	e.Validator = lib.NewValidator()
+	//set error handler
+	e.HTTPErrorHandler = lib.HTTPErrorHandler
 	//set middleware
 	middlewares.New(e)
 	e.GET("/", func(c echo.Context) error {
