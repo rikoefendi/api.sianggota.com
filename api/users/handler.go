@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"api.sianggota.com/lib"
 	"api.sianggota.com/utils"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -20,15 +21,12 @@ func Handler(r Repository) (h *UserHandler) {
 
 func (h *UserHandler) Create(c echo.Context) (err error) {
 	input := &UserCreateInput{}
-	if err = c.Bind(input); err != nil {
-		return err
-	}
-	if err = c.Validate(input); err != nil {
+	if err = lib.BindValidate(c, input); err != nil {
 		return err
 	}
 	result, err := h.r.Create(*input)
 	if err != nil {
-		return c.JSON(500, err)
+		return err
 	}
 	r := utils.Response(result)
 	return c.JSON(http.StatusOK, r)

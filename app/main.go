@@ -42,6 +42,7 @@ func main() {
 
 	//start server
 	e := echo.New()
+	e.Binder = &lib.CustomBinder{}
 	//set validator
 	e.Validator = lib.NewValidator()
 	//set error handler
