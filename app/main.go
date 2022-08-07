@@ -2,19 +2,17 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"time"
 
 	"api.sianggota.com/api"
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
 	"api.sianggota.com/database/migration"
-	"api.sianggota.com/database/seed"
 	"api.sianggota.com/lib"
+	"api.sianggota.com/lib/command"
 	"api.sianggota.com/middlewares"
 	"github.com/labstack/echo/v4"
 	"github.com/neko-neko/echo-logrus/v2/log"
@@ -31,14 +29,7 @@ func main() {
 		}
 	}
 	//run seed and stop
-	seedCmd := flag.String("seed", "", "")
-	countCmd := flag.String("count", "", "")
-	flag.Parse()
-	if len(string(*seedCmd)) != 0 {
-		count, _ := strconv.Atoi(*countCmd)
-		seed.Populate(string(*seedCmd), count)
-		os.Exit(1)
-	}
+	command.New()
 
 	//start server
 	e := echo.New()
