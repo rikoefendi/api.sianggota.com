@@ -8,6 +8,9 @@ import (
 )
 
 func New() {
+	if len(os.Args) < 2 {
+		return
+	}
 	seed := flag.NewFlagSet("database seeder", flag.ExitOnError)
 	nameFile := seed.String("name", "", "fucntion name to seed")
 	countCmd := seed.Int("count", 0, "")
