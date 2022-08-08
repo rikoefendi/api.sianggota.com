@@ -4,6 +4,7 @@ import (
 	"flag"
 	"os"
 
+	"api.sianggota.com/database/migration"
 	"api.sianggota.com/database/seed"
 )
 
@@ -42,5 +43,6 @@ func seeder(seedName string, count int) error {
 	return seed.Populate(seedName, count)
 }
 func migrator(name string) (err error) {
+	migration.Migrate()
 	return err
 }

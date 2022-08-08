@@ -10,7 +10,6 @@ import (
 	"api.sianggota.com/api"
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
-	"api.sianggota.com/database/migration"
 	"api.sianggota.com/lib"
 	"api.sianggota.com/lib/command"
 	"api.sianggota.com/middlewares"
@@ -48,7 +47,6 @@ func main() {
 		<p>==================================================================================</center>`
 		return c.HTML(200, message)
 	})
-	migration.Migrate()
 	e.GET("/ping", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"hello": "world"})
 	})

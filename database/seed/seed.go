@@ -7,7 +7,6 @@ import (
 	"api.sianggota.com/database"
 	"github.com/bxcodec/faker/v3"
 	"github.com/cheggaaa/pb/v3"
-	"github.com/neko-neko/echo-logrus/v2/log"
 )
 
 var funcMap = map[string]interface{}{
@@ -21,7 +20,6 @@ func Populate(seedName string, c int) error {
 	if c != 0 {
 		count = c
 	}
-	log.Info(count)
 	if seedName == "" {
 		var err error
 		for _, f := range funcMap {
