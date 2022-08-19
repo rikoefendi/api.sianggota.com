@@ -35,8 +35,6 @@ ALTER TABLE
     "users" ADD CONSTRAINT "users_username_unique" UNIQUE("username");
 ALTER TABLE
     "users" ADD CONSTRAINT "users_email_unique" UNIQUE("email");
-ALTER TABLE
-    "users" ADD CONSTRAINT "users_phone_unique" UNIQUE("phone");
 
 -- create authorizations
 CREATE TABLE "authorizations"(

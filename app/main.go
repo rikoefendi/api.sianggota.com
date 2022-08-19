@@ -10,6 +10,7 @@ import (
 	"api.sianggota.com/api"
 	"api.sianggota.com/config"
 	"api.sianggota.com/database"
+	"api.sianggota.com/events"
 	"api.sianggota.com/lib"
 	"api.sianggota.com/lib/command"
 	"api.sianggota.com/middlewares"
@@ -39,6 +40,8 @@ func main() {
 	e.HTTPErrorHandler = lib.HTTPErrorHandler
 	//set middleware
 	middlewares.New(e)
+	//init event
+	events.New()
 	e.GET("/", func(c echo.Context) error {
 		message := `
 		<center>==================================================================================

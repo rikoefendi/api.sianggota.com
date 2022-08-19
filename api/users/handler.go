@@ -6,6 +6,7 @@ import (
 
 	"api.sianggota.com/lib"
 	"api.sianggota.com/utils"
+	"github.com/gookit/event"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -28,6 +29,7 @@ func (h *UserHandler) Create(c echo.Context) (err error) {
 	if err != nil {
 		return err
 	}
+	event.Fire("users.create", event.M{"users": result})
 	r := utils.Response(result)
 	return c.JSON(http.StatusOK, r)
 }
