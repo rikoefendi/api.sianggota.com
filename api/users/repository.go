@@ -18,7 +18,7 @@ func New() *Repository {
 
 func (r *Repository) Create(u UserCreateInput) (Model, error) {
 	m := Model{
-		Name: &u.Name, Email: &u.Email, Password: u.Password,
+		Name: &u.Name, Email: &u.Email, Password: u.Password, Phone: &u.Phone,
 	}
 	result := r.db.Create(&m)
 	if result.Error != nil {

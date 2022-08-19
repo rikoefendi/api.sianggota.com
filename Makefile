@@ -1,6 +1,6 @@
 dev:
 	#Watching File
-	reflex -r '\.go' -s -- sh -c "ENV=$1 go run app/main.go"
+	reflex -r '\.go' -s -- sh -c "ENV=dev.env go run app/main.go"
 commit:
 	git add .
 	git commit -m "$(message)"

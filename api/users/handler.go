@@ -35,10 +35,7 @@ func (h *UserHandler) Create(c echo.Context) (err error) {
 func (h *UserHandler) Update(c echo.Context) (err error) {
 	input := UserUpdateInput{}
 	id := c.Param("id")
-	if err = c.Bind(&input); err != nil {
-		return err
-	}
-	if err = c.Validate(input); err != nil {
+	if err = lib.BindValidate(c, &input); err != nil {
 		return err
 	}
 	dest := Model{
