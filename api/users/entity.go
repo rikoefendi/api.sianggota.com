@@ -3,7 +3,7 @@ package users
 type UserCreateInput struct {
 	Name     string `json:"name" validate:"required|minLength:5|maxLength:25"`
 	Email    string `json:"email" validate:"required|email|unique:users,email"`
-	Phone    string `json:"phone" validate:"maxLength:16"`
+	Phone    string `json:"phone" validate:"maxLength:16|unique:users,phone"`
 	Password string `json:"password" validate:"required"`
 }
 

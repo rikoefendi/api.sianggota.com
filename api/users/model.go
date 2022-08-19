@@ -10,13 +10,14 @@ import (
 
 type Model struct {
 	database.ID
-	Name            *string    `json:"name" gorm:"type:varchar;size:225"`
-	Username        *string    `json:"usernmae" gorm:"type:varchar;size:50;unique;index;null"`
-	Email           *string    `json:"email" gorm:"type:varchar;size:50;unique;index;not null"`
+	Name            *string    `json:"name"`
+	Username        *string    `json:"usernmae"`
+	Email           *string    `json:"email"`
 	EmailVerifiedAt *time.Time `json:"email_verified_at"`
-	Phone           *string    `json:"phone" gorm:"size:20;null"`
-	Password        string     `json:"-" gorm:"type:varchar;size:225;not null"`
-	Status          *float64   `json:"status" gorm:"default:0"`
+	Phone           *string    `json:"phone"`
+	PhoneVerifiedAt *time.Time `json:"phone_verified_at"`
+	Password        string     `json:"-"`
+	Status          int        `json:"status"`
 	database.TimeStamp
 }
 
