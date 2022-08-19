@@ -19,6 +19,7 @@ func New() {
 	migrate := flag.NewFlagSet("database migrator", flag.ExitOnError)
 	nameMigrate := migrate.String("name", "", "function name to migrate")
 	refresh := migrate.Bool("refresh", false, "to refresh database")
+	init := migrate.Bool("init", false, "to init database from sql file")
 	switch os.Args[1] {
 	case "seed":
 		seed.Parse(os.Args[2:])
@@ -30,7 +31,7 @@ func New() {
 	case "migrate":
 		migrate.Parse(os.Args[2:])
 		name := string(*nameMigrate)
-		err := migrator(name, *refresh)
+		err := migrator(name, *refresh, *init)
 		if err != nil {
 			panic(err)
 		}
@@ -43,7 +44,6 @@ func New() {
 func seeder(seedName string, count int) error {
 	return seed.Populate(seedName, count)
 }
-func migrator(name string, refresh bool) (err error) {
-	migration.Migrate(name, refresh)
-	return err
+func migrator(name string, refresh bool, init bool) error {
+	return migration.Migrate(name, refresh, init)
 }
